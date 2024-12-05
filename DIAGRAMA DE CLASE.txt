@@ -1,0 +1,55 @@
+@startuml
+' Definición de clases
+class Cliente {
+ - idCliente: int
+ - nombre: String
+ - email: String
+ - reservasActivas: List<Reserva>
+ + registrarReserva(reserva: Reserva): boolean
+ + validarMaxReservas(): boolean
+}
+class Reserva {
+ - idReserva: int
+ - fecha: Date
+ - hora: String
+ - cliente: Cliente
+ - cancha: Cancha
+ - costo: float
+ + registrarReserva(): boolean
+ + verificarRestricciones(): boolean
+ + calcularCosto(): float
+}
+class Cancha {
+ - idCancha: int
+ - tipoCancha: String
+ - deporte: Deporte
+ + verificarDisponibilidad(fecha: Date, hora: String): boolean
+}
+class Deporte {
+ - idDeporte: int
+ - nombre: String
+}
+class CostoReserva {
+ - precioBase: float
+ - cantidadJugadores: int
+ - precioAlquilerPaleta: float
+ - precioAlquilerPelotas: float
+ - precioAlquilerRaqueta: float
+ + calcularCostoFutbol(cantidadJugadores: int): float
+ + calcularCostoPadel(): float
+ + calcularCostoTenis(): float
+}
+class Club {
+ - idClub: int
+ - nombre: String
+ - listaCanchas: List<Cancha>
+ + buscarCancha(idCancha: int): Cancha
+}
+' Relaciones entre clases
+Cliente "1" -- "0..*" Reserva : hace
+Reserva "0..1" -- "1" Cancha : reserva
+Cancha "1" -- "1" Deporte : tiene
+Reserva "1" -- "1" CostoReserva : calcula
+Club "1" -- "0..*" Cancha : administra
+@enduml
+tiene menú contextual

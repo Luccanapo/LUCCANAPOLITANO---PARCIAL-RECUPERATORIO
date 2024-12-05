@@ -1,0 +1,26 @@
+@startuml
+actor Cliente
+participant "Sistema de Gestión" as Sistema
+participant "Reserva" as Reserva
+participant "Cancha" as Cancha
+participant "CostoReserva" as CostoReserva
+Cliente -> Sistema: Solicitar cálculo de costo(idReserva)
+activate Sistema
+Sistema -> Reserva: Obtener reserva(idReserva)
+activate Reserva
+Reserva --> Sistema: reserva
+
+Sistema -> Cancha: Obtener tipo de cancha asociada a la reserva
+activate Cancha
+Cancha --> Sistema: cancha
+
+Sistema -> CostoReserva: Calcular costo basado en tipo de cancha
+activate CostoReserva
+CostoReserva --> Sistema: costo
+
+Sistema -> Cliente: costo
+deactivate Reserva
+deactivate Cancha
+deactivate CostoReserva
+deactivate Sistema
+@enduml
