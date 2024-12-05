@@ -1,0 +1,75 @@
+@startuml
+
+actor Cliente
+
+participant "Sistema de Gestión" as Sistema
+
+participant "Club" as Club
+
+participant "Cancha" as Cancha
+
+participant "Reserva" as Reserva
+
+Cliente -> Sistema: Solicitar reserva(idClub, numeroCancha, idCliente, fecha, hora)
+
+activate Sistema
+
+Sistema -> Club: Obtener información del club(idClub)
+
+activate Club
+
+Club --> Sistema: club
+
+
+Sistema -> Cancha: Verificar disponibilidad(numeroCancha, fecha, hora)
+
+activate Cancha
+
+Cancha --> Sistema: boolean
+
+
+alt Cancha disponible
+
+    Sistema -> Reserva: Verificar restricciones(idCliente, fecha, hora)
+
+    activate Reserva
+
+    Reserva -> Sistema: ¿Cliente tiene más de 2 reservas activas?
+
+    Sistema --> Reserva: boolean
+
+    Reserva -> Sistema: ¿Cancha reservada en el mismo horario?
+
+    Sistema --> Reserva: boolean
+
+
+    alt Restricciones válidas
+
+        Sistema -> Reserva: Crear nueva reserva(idCliente, numeroCancha, fecha, hora)
+
+        Reserva --> Sistema: reserva
+
+
+        Sistema --> Cliente: Confirmar reserva
+
+    else Restricciones no válidas
+
+        Sistema --> Cliente: Notificar restricciones no cumplidas
+
+    end
+
+else Cancha no disponible
+
+    Sistema --> Cliente: Notificar cancha no disponible
+
+end
+
+deactivate Club
+
+deactivate Cancha
+
+deactivate Reserva
+
+deactivate Sistema
+
+@enduml 
